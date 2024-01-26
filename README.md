@@ -18,9 +18,10 @@ to build and run the container using the dev yaml file.
 
 Access docs:
 ```sh
-http://localhost:8000/api/v1/doc
+http://localhost:9542/api/v1/doc
 ```
 
+![Screenshot](screenshot3.png)
 
 # Run tests
 Run descriptive tests in the container using:

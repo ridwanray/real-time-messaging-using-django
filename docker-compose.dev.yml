@@ -6,19 +6,19 @@ services:
       context: .
       dockerfile: docker/dev/Dockerfile
     image: messaging-dev-deploy
-    command: python manage.py runserver
+    command: daphne -b 0.0.0.0 -p 9542 core.asgi:application
     volumes:
       - ./app:/app
     ports:
-      - '8000:8000'
-      - '8001:8001'
+      - '9542:9542'
+
     env_file:
       - ./.env
     restart: unless-stopped
-  
+
   redis:
     image: bitnami/redis
     ports:
-      - "16739:6739"
+      - "6739:6739"
     env_file:
       - ./.env
