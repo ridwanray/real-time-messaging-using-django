@@ -46,7 +46,7 @@ pytest -rP -vv
 
 # Worflow
 - Create 2 accounts on the system
-- Login to the auth token for both users
+- Login to get the auth token for both users
 - Open two tabs, supply a user's auth token and the recipient id i.e. (the other user)
 - Click connect websocket 
 - Start sending messages
