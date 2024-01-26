@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test</title>
+    <style>
+        .sent-message {
+            text-align: right;
+            color: green;
+        }
+
+        .received-message {
+            text-align: left;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>WebSocket Test</h1>
+
+    <div>
+        <label>Recipient User ID:</label>
+        <input id="receiver" placeholder="Enter message receiver's id" autocomplete="off">
+        <br><br>
+        <label>Your Authentication Token:</label>
+        <input id="authtoken" placeholder="Enter your authentication token" autocomplete="off">
+        <br><br>
+        <button onclick="connectWebSocket()">Connect WebSocket</button>
+    </div>
+
+    <hr>
+    <br><br>
+
+    <div>
+        <label for="message">Message:</label>
+        <input type="text" id="message" placeholder="Enter your message" autocomplete="off">
+        <button onclick="sendMessage()">Send Message</button>
+    </div>
+
+    <hr>
+
+    <div id="output">
+        <!-- WebSocket messages will be displayed here -->
+    </div>
+
+    <script>
+
+        const outputDiv = document.getElementById('output');
+        let socket;
+
+        function connectWebSocket() {
+
+            const authTokenInput = document.getElementById('authtoken').value;
+            console.log("2", authTokenInput);
+            const socket = new WebSocket(`ws://127.0.0.1:9542/messaging/?token=${authTokenInput}`);
+
+            socket.onopen = function (event) {
+                console.log('Connection opened:', event);
+            };
+
+            socket.onmessage = function (event) {
+                const data = JSON.parse(event.data);
+                console.log('Message received:', data);
+                
+                outputDiv.innerHTML += `<p class="received-message">${data.message.content}</p>`;
+            };
+
+            socket.onclose = function (event) {
+                console.log('WebSocket connection closed:', event);
+            };
+
+        }
+
+        function sendMessage() {
+
+            const authTokenInput = document.getElementById('authtoken').value;
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value;
+
+            // receiver_id for testing
+            const receiver_id = document.getElementById('receiver').value;
+
+            // API endpoint for sending messages via HTTP
+            const apiUrl = 'http://127.0.0.1:9542/api/v1/message/';
+
+            // Send message via HTTP
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authTokenInput}`
+                },
+                body: JSON.stringify({
+                    receiver: receiver_id,
+                    content: message
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Message sent via HTTP:', data);
+
+                    outputDiv.innerHTML += `<p class="sent-message">${data.content}</p>`;
+
+                    messageInput.value = '';
+                })
+                .catch(error => console.error('Error sending message via HTTP:', error));
+        }
+    </script>
+</body>
+
+</html>
