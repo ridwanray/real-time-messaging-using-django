@@ -41,13 +41,17 @@ pytest -rP -vv
 # Frontent
 ![Screenshot](screenshot2.png)
 
+# Frontend html file
+- Frontend html (socket.html) is located at the root dir.
+
 # Worflow
 - Create 2 accounts on the system
 - Login to the auth token for both users
 - Open two tabs, supply a user's auth token and the recipient id i.e. (the other user)
 - Click connect websocket 
-- Start messaging
+- Start sending messages
 
 # Frontend improvement
+##TODOs
 - show a notification pop up if message type is message_read_status
 - filter for appropriate user to know who to display the message to when there are multiple users interacting with a user.
