@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  api: &api
+    build:
+      context: .
+      dockerfile: docker/dev/Dockerfile
+    image: messaging-dev-deploy
+    command: python manage.py runserver
+    volumes:
+      - ./app:/app
+    ports:
+      - '8000:8000'
+      - '8001:8001'
+    env_file:
+      - ./.env
+    restart: unless-stopped
+  
+  redis:
+    image: bitnami/redis
+    ports:
+      - "16739:6739"
+    env_file:
+      - ./.env
